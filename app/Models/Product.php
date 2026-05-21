@@ -46,11 +46,6 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
-    }
-
     public function discountedPrice(): Attribute
     {
         return Attribute::get(fn () => $this->discount_price ?? $this->price);
@@ -69,7 +64,7 @@ class Product extends Model
     public function imageUrl(): Attribute
     {
         return Attribute::get(fn () => $this->image
-            ? (str_starts_with($this->image, 'http') ? $this->image : Storage::url($this->image))
+            ? (str_starts_with($this->image, 'http') ? $this->image : asset($this->image))
             : 'https://placehold.co/600x600/1A1030/7C3AED?text=Produk');
     }
 }
