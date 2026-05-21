@@ -46,6 +46,12 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    // ✅ FIX: Relasi reviews yang sebelumnya tidak ada
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function discountedPrice(): Attribute
     {
         return Attribute::get(fn () => $this->discount_price ?? $this->price);
