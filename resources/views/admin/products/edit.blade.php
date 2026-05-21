@@ -76,7 +76,7 @@
                 <label class="block text-sm font-medium text-text-muted mb-2">Gambar</label>
                 @if ($product->image)
                     <div class="mb-3">
-                        <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : asset($product->image) }}" class="w-40 h-40 object-cover rounded-xl border border-accent/20">
+                        <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset($product->image) }}" class="w-40 h-40 object-cover rounded-xl border border-accent/20">
                     </div>
                 @endif
 
@@ -94,7 +94,7 @@
                     </div>
                     <div>
                         <label class="block text-xs text-text-muted mb-1">URL Gambar (Cloudinary, Imgur, dll)</label>
-                        <input type="text" name="image_url" id="image_url" placeholder="https://..." value="{{ Str::startsWith($product->image ?? '', 'http') ? $product->image : '' }}"
+                        <input type="text" name="image_url" id="image_url" placeholder="https://..." value="{{ str_starts_with($product->image ?? '', 'http') ? $product->image : '' }}"
                                oninput="if(this.value){ document.getElementById('preview').src=this.value; document.getElementById('preview').classList.remove('hidden'); }"
                                class="w-full bg-dark-bg border border-accent/20 rounded-xl px-4 py-2.5 text-white placeholder-text-muted/50 focus:border-accent focus:outline-none text-sm">
                     </div>
