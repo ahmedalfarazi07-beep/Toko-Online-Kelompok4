@@ -9,6 +9,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
+
+    {{-- Apply theme BEFORE render to prevent flash --}}
+    <script>
+        (function() {
+            var saved = localStorage.getItem('theme');
+            if (!saved) {
+                saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            if (saved === 'light') {
+                document.documentElement.classList.add('light');
+            }
+        })();
+    </script>
 </head>
 @php
     use App\Models\CartItem;
@@ -20,7 +33,7 @@
         : CartItem::where('session_id', Session::getId())->sum('quantity');
 @endphp
 
-<body class="bg-dark-bg text-white/85 font-sans antialiased">
+<body class="font-sans antialiased" style="background-color: var(--bg-primary); color: var(--text-primary);">
     <x-nav :cartCount="$cartCount" />
 
     <main>
@@ -58,11 +71,11 @@
         </div>
     </div>
 
-    {{-- Full Footer --}}
-    <footer class="border-t border-[rgba(124,58,237,0.2)] mt-20" style="background-color: #0D0A1A;">
+    {{-- Footer --}}
+    <footer class="mt-20" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-color);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-                {{-- Column 1: Logo + Description --}}
+                {{-- Logo + Description --}}
                 <div>
                     <a href="{{ url('/') }}" class="font-heading text-xl font-bold text-highlight tracking-tight inline-block mb-4">
                         Toko Online
@@ -70,7 +83,6 @@
                     <p class="text-text-muted text-sm leading-relaxed mb-4">
                         Belanja Mudah, Cepat, dan Terpercaya. Temukan produk berkualitas dengan harga terbaik.
                     </p>
-                    {{-- Social Icons --}}
                     <div class="flex gap-3">
                         <a href="#" class="text-text-muted hover:text-highlight transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -84,32 +96,32 @@
                     </div>
                 </div>
 
-                {{-- Column 2: Produk Links --}}
+                {{-- Produk --}}
                 <div>
-                    <h4 class="font-heading font-semibold text-white mb-4">Produk</h4>
+                    <h4 class="font-heading font-semibold mb-4" style="color: var(--text-primary);">Produk</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="{{ route('products.index') }}" class="text-text-muted hover:text-white transition-colors">Semua Produk</a></li>
-                        <li><a href="{{ url('/products?category=elektronik') }}" class="text-text-muted hover:text-white transition-colors">Elektronik</a></li>
-                        <li><a href="{{ url('/products?category=fashion') }}" class="text-text-muted hover:text-white transition-colors">Fashion</a></li>
-                        <li><a href="{{ url('/products?category=aksesoris') }}" class="text-text-muted hover:text-white transition-colors">Aksesoris</a></li>
+                        <li><a href="{{ route('products.index') }}" class="text-text-muted hover:text-highlight transition-colors">Semua Produk</a></li>
+                        <li><a href="{{ url('/products?category=elektronik') }}" class="text-text-muted hover:text-highlight transition-colors">Elektronik</a></li>
+                        <li><a href="{{ url('/products?category=fashion') }}" class="text-text-muted hover:text-highlight transition-colors">Fashion</a></li>
+                        <li><a href="{{ url('/products?category=aksesoris') }}" class="text-text-muted hover:text-highlight transition-colors">Aksesoris</a></li>
                     </ul>
                 </div>
 
-                {{-- Column 3: Bantuan Links --}}
+                {{-- Bantuan --}}
                 <div>
-                    <h4 class="font-heading font-semibold text-white mb-4">Bantuan</h4>
+                    <h4 class="font-heading font-semibold mb-4" style="color: var(--text-primary);">Bantuan</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="text-text-muted hover:text-white transition-colors">Cara Belanja</a></li>
-                        <li><a href="#" class="text-text-muted hover:text-white transition-colors">Pengiriman</a></li>
-                        <li><a href="#" class="text-text-muted hover:text-white transition-colors">Pengembalian</a></li>
-                        <li><a href="#" class="text-text-muted hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-text-muted hover:text-white transition-colors">Hubungi Kami</a></li>
+                        <li><a href="#" class="text-text-muted hover:text-highlight transition-colors">Cara Belanja</a></li>
+                        <li><a href="#" class="text-text-muted hover:text-highlight transition-colors">Pengiriman</a></li>
+                        <li><a href="#" class="text-text-muted hover:text-highlight transition-colors">Pengembalian</a></li>
+                        <li><a href="#" class="text-text-muted hover:text-highlight transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-text-muted hover:text-highlight transition-colors">Hubungi Kami</a></li>
                     </ul>
                 </div>
 
-                {{-- Column 4: Kontak --}}
+                {{-- Kontak --}}
                 <div>
-                    <h4 class="font-heading font-semibold text-white mb-4">Kontak</h4>
+                    <h4 class="font-heading font-semibold mb-4" style="color: var(--text-primary);">Kontak</h4>
                     <ul class="space-y-3 text-sm text-text-muted">
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -128,14 +140,14 @@
             </div>
 
             {{-- Bottom Bar --}}
-            <div class="border-t border-accent/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4" style="border-top: 1px solid var(--border-color);">
                 <p class="text-text-muted text-sm">&copy; {{ date('Y') }} Toko Online. All rights reserved.</p>
                 <div class="flex items-center gap-3">
-                    <span class="bg-white/10 text-text-muted text-xs font-semibold px-3 py-1.5 rounded">VISA</span>
-                    <span class="bg-white/10 text-text-muted text-xs font-semibold px-3 py-1.5 rounded">Mastercard</span>
-                    <span class="bg-white/10 text-text-muted text-xs font-semibold px-3 py-1.5 rounded">GoPay</span>
-                    <span class="bg-white/10 text-text-muted text-xs font-semibold px-3 py-1.5 rounded">OVO</span>
-                    <span class="bg-white/10 text-text-muted text-xs font-semibold px-3 py-1.5 rounded">DANA</span>
+                    <span class="text-text-muted text-xs font-semibold px-3 py-1.5 rounded" style="background-color: var(--bg-surface-2);">VISA</span>
+                    <span class="text-text-muted text-xs font-semibold px-3 py-1.5 rounded" style="background-color: var(--bg-surface-2);">Mastercard</span>
+                    <span class="text-text-muted text-xs font-semibold px-3 py-1.5 rounded" style="background-color: var(--bg-surface-2);">GoPay</span>
+                    <span class="text-text-muted text-xs font-semibold px-3 py-1.5 rounded" style="background-color: var(--bg-surface-2);">OVO</span>
+                    <span class="text-text-muted text-xs font-semibold px-3 py-1.5 rounded" style="background-color: var(--bg-surface-2);">DANA</span>
                 </div>
             </div>
         </div>
