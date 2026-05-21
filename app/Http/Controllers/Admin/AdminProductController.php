@@ -67,13 +67,18 @@ class AdminProductController extends Controller
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image_url' => 'nullable|url',
         ]);
 
         if ($request->hasFile('image')) {
             $imageName = Str::random(20).'.'.$request->file('image')->extension();
             $request->file('image')->move(public_path('uploads/products'), $imageName);
             $validated['image'] = 'uploads/products/'.$imageName;
+        } elseif ($request->filled('image_url')) {
+            $validated['image'] = $request->image_url;
         }
+
+        unset($validated['image_url']);
 
         Product::create($validated);
 
@@ -102,16 +107,21 @@ class AdminProductController extends Controller
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image_url' => 'nullable|url',
         ]);
 
         if ($request->hasFile('image')) {
-            if ($product->image && file_exists(public_path($product->image))) {
+            if ($product->image && !Str::startsWith($product->image, 'http') && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
             }
             $imageName = Str::random(20).'.'.$request->file('image')->extension();
             $request->file('image')->move(public_path('uploads/products'), $imageName);
             $validated['image'] = 'uploads/products/'.$imageName;
+        } elseif ($request->filled('image_url')) {
+            $validated['image'] = $request->image_url;
         }
+
+        unset($validated['image_url']);
 
         $product->update($validated);
 

@@ -73,9 +73,25 @@
 
             <div>
                 <label class="block text-sm font-medium text-text-muted mb-2">Gambar</label>
-                <input type="file" name="image" accept="image/jpeg,image/png,image/webp"
-                       onchange="if(this.files[0]) document.getElementById('preview').src = URL.createObjectURL(this.files[0])"
-                       class="w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30">
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-text-muted mb-1">Upload File</label>
+                        <input type="file" name="image" accept="image/jpeg,image/png,image/webp"
+                               onchange="if(this.files[0]){ document.getElementById('preview').src=URL.createObjectURL(this.files[0]); document.getElementById('preview').classList.remove('hidden'); document.getElementById('image_url').value=''; }"
+                               class="w-full text-sm text-text-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 h-px bg-accent/20"></div>
+                        <span class="text-xs text-text-muted">atau</span>
+                        <div class="flex-1 h-px bg-accent/20"></div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-text-muted mb-1">URL Gambar (Cloudinary, Imgur, dll)</label>
+                        <input type="text" name="image_url" id="image_url" placeholder="https://..."
+                               oninput="if(this.value){ document.getElementById('preview').src=this.value; document.getElementById('preview').classList.remove('hidden'); }"
+                               class="w-full bg-dark-bg border border-accent/20 rounded-xl px-4 py-2.5 text-white placeholder-text-muted/50 focus:border-accent focus:outline-none text-sm">
+                    </div>
+                </div>
                 <img id="preview" class="mt-3 w-40 h-40 object-cover rounded-xl border border-accent/20 hidden">
                 @error('image') <p class="text-red-400 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
