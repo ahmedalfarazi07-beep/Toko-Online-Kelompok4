@@ -84,7 +84,7 @@
                     <div class="bg-surface glow-border rounded-xl overflow-hidden group relative">
                         <div class="relative overflow-hidden aspect-square">
                             <img
-                                src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x600/1A1030/A855F7?text=No+Image' }}"
+                                src="{{ $product->image ? (Str::startsWith($product->image, 'http') ? $product->image : asset($product->image)) : 'https://placehold.co/600x600/1A1030/A855F7?text=No+Image' }}"
                                 alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             >
