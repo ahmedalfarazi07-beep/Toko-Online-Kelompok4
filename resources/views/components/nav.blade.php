@@ -40,6 +40,26 @@
                     </svg>
                 </button>
 
+                {{-- ☀️🌙 Dark / Light Mode Toggle --}}
+                <button
+                    id="theme-toggle"
+                    onclick="toggleTheme()"
+                    title="Toggle Dark/Light Mode"
+                    aria-label="Toggle theme"
+                >
+                    <span class="toggle-thumb">
+                        {{-- Moon icon (dark mode) --}}
+                        <svg class="icon-moon" fill="currentColor" viewBox="0 0 24 24" style="color:white;">
+                            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+                        </svg>
+                        {{-- Sun icon (light mode) --}}
+                        <svg class="icon-sun" fill="currentColor" viewBox="0 0 24 24" style="color:white;">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </button>
+
                 <a href="{{ route('cart.index') }}" class="relative text-text-muted hover:text-white transition-colors duration-200">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
@@ -129,6 +149,15 @@
                 <a href="{{ route('login') }}" class="block text-sm text-text-muted hover:text-white transition-colors">Login</a>
                 <a href="{{ route('register') }}" class="block text-sm font-medium text-highlight hover:text-white transition-colors">Register</a>
             @endauth
+
+            {{-- Mobile Dark/Light Toggle --}}
+            <hr class="border-accent/20">
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-text-muted">Tema</span>
+                <button id="theme-toggle-mobile" onclick="toggleTheme()" class="text-sm text-text-muted hover:text-white transition-colors flex items-center gap-2">
+                    <span id="theme-label-mobile">🌙 Dark</span>
+                </button>
+            </div>
         </div>
     </div>
 </nav>

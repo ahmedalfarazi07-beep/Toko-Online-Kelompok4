@@ -4,7 +4,49 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 
-// Toast notification system
+// =============================================
+// DARK / LIGHT MODE
+// =============================================
+function applyTheme(theme) {
+    const html = document.documentElement;
+
+    if (theme === 'light') {
+        html.classList.add('light');
+        html.classList.remove('dark');
+    } else {
+        html.classList.remove('light');
+        html.classList.add('dark');
+    }
+
+    // Update mobile label if exists
+    const mobileLabel = document.getElementById('theme-label-mobile');
+    if (mobileLabel) {
+        mobileLabel.textContent = theme === 'light' ? '☀️ Light' : '🌙 Dark';
+    }
+
+    localStorage.setItem('theme', theme);
+}
+
+window.toggleTheme = function () {
+    const current = localStorage.getItem('theme') || 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+};
+
+// Apply saved theme immediately on page load
+(function () {
+    const saved = localStorage.getItem('theme');
+    // If no preference saved, check system preference
+    if (!saved) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+    } else {
+        applyTheme(saved);
+    }
+})();
+
+// =============================================
+// TOAST NOTIFICATION SYSTEM
+// =============================================
 window.showToast = function(message, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -34,7 +76,9 @@ window.showToast = function(message, type = 'success') {
     }, 3000);
 };
 
-// Particle animation for hero canvas
+// =============================================
+// PARTICLE BACKGROUND
+// =============================================
 class ParticleBackground {
     constructor(canvas) {
         if (!canvas) return;
@@ -78,7 +122,7 @@ class ParticleBackground {
 
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         this.particles.forEach((p, i) => {
             p.x += p.vx;
             p.y += p.vy;
@@ -86,7 +130,6 @@ class ParticleBackground {
             if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
             if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
 
-            // Mouse interaction
             const dx = this.mouseX - p.x;
             const dy = this.mouseY - p.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -100,7 +143,6 @@ class ParticleBackground {
             this.ctx.fillStyle = `rgba(124, 58, 237, ${p.opacity})`;
             this.ctx.fill();
 
-            // Connect nearby particles
             for (let j = i + 1; j < this.particles.length; j++) {
                 const dx2 = this.particles[j].x - p.x;
                 const dy2 = this.particles[j].y - p.y;
@@ -120,7 +162,9 @@ class ParticleBackground {
     }
 }
 
-// Initialize everything on DOM ready
+// =============================================
+// DOM READY
+// =============================================
 document.addEventListener('DOMContentLoaded', () => {
     // Hero particles
     const particleCanvas = document.getElementById('particleCanvas');
@@ -142,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(type, 500);
     }
 
-    // Scroll reveal with IntersectionObserver
+    // Scroll reveal
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length) {
         const observer = new IntersectionObserver(
@@ -159,18 +203,18 @@ document.addEventListener('DOMContentLoaded', () => {
         revealElements.forEach((el) => observer.observe(el));
     }
 
-    // Cart badge bounce animation
+    // Cart badge bounce
     const cartBadge = document.getElementById('cart-badge');
     if (cartBadge) {
         const observer = new MutationObserver(() => {
             cartBadge.classList.remove('animate-scale-bounce');
-            void cartBadge.offsetWidth; // reflow
+            void cartBadge.offsetWidth;
             cartBadge.classList.add('animate-scale-bounce');
         });
         observer.observe(cartBadge, { characterData: true, childList: true, subtree: true });
     }
 
-    // Button ripple effect
+    // Button ripple
     document.querySelectorAll('.btn-ripple').forEach((btn) => {
         btn.addEventListener('click', function (e) {
             const rect = this.getBoundingClientRect();
@@ -194,9 +238,18 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => ripple.remove(), 600);
         });
     });
+
+    // Sync mobile theme label on load
+    const mobileLabel = document.getElementById('theme-label-mobile');
+    if (mobileLabel) {
+        const saved = localStorage.getItem('theme') || 'dark';
+        mobileLabel.textContent = saved === 'light' ? '☀️ Light' : '🌙 Dark';
+    }
 });
 
-// Add ripple and toast animation keyframes
+// =============================================
+// ANIMATION KEYFRAMES (injected)
+// =============================================
 const style = document.createElement('style');
 style.textContent = `
     @keyframes ripple-effect {
